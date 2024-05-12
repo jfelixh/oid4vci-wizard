@@ -1,24 +1,40 @@
 import vc from "@digitalcredentials/vc";
 import { Ed25519VerificationKey2020 } from "@digitalcredentials/ed25519-verification-key-2020";
 import { Ed25519Signature2020 } from "@digitalcredentials/ed25519-signature-2020";
-import { useState } from "react";
+import documentLoader from "../lib/documentLoader";
+import { Redis } from "ioredis";
+
+var redis: Redis;
+try {
+  redis = new Redis();
+} catch (error) {
+  console.error("Failed to connect to Redis:", error);
+}
 
 const keyPair = await Ed25519VerificationKey2020.generate();
-
 const suite = new Ed25519Signature2020({ key: keyPair });
 
 export default function Home() {
   async function createCredential(formData: FormData) {
     "use server";
 
-    const rawFormData = {
-      customerId: formData.get("customerId"),
-      amount: formData.get("amount"),
-      status: formData.get("status"),
-    };
+    const payload = JSON.parse(formData.get("payload") as string);
 
-    // mutate data
-    // revalidate cache
+    suite.verificationMethod =
+      "did:key:" +
+      keyPair.publicKeyMultibase +
+      "#" +
+      keyPair.publicKeyMultibase;
+
+    payload.issuer = "did:key:" + keyPair.publicKeyMultibase;
+
+    const signedCredential = await vc.issue({
+      credential: payload,
+      suite,
+      documentLoader,
+    });
+
+    console.log(signedCredential);
   }
 
   const test_payload = {
@@ -26,10 +42,8 @@ export default function Home() {
       "https://www.w3.org/2018/credentials/v1",
       "https://www.w3.org/2018/credentials/examples/v1",
     ],
-    id: "https://example.com/credentials/1872",
+    id: "urn:uuid:3978344f-344d-46a2-8556-1e67196186c6",
     type: ["VerifiableCredential", "AlumniCredential"],
-    issuer: "https://example.edu/issuers/565049",
-    issuanceDate: "2010-01-01T19:23:24Z",
     credentialSubject: {
       id: "did:example:ebfeb1f712ebc6f1c276e12ec21",
       alumniOf: "Example University",
