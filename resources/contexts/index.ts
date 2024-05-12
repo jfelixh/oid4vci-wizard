@@ -1,8 +1,6 @@
-"use strict";
-
 const credentialsContext = require("credentials-context");
 
-module.exports = new Map([
+const testContext = new Map([
   ...credentialsContext.contexts,
   [
     "https://www.w3.org/2018/credentials/examples/v1",
@@ -16,3 +14,5 @@ module.exports = new Map([
     require("./sl2021.json"),
   ],
 ]);
+
+export default testContext;

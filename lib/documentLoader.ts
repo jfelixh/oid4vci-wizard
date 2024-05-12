@@ -1,12 +1,9 @@
-const axios = require("axios");
-const vc = require("@digitalcredentials/vc");
+import axios from "axios";
+import vc from "@digitalcredentials/vc";
 
-const testContext = require("../resources/contexts/index");
+import testContext from "../resources/contexts/index";
 
 const documentLoader = async (url: string) => {
-  console.log("OH YES");
-  console.log(url);
-
   const context = testContext.get(url);
   if (context) {
     return {
@@ -25,9 +22,6 @@ const documentLoader = async (url: string) => {
     };
     return result;
   }
-
-  console.log("OH NO");
-  console.log(url);
 
   return vc.defaultDocumentLoader(url);
 };
