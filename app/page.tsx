@@ -3,6 +3,7 @@ import { Ed25519VerificationKey2020 } from "@digitalcredentials/ed25519-verifica
 import { Ed25519Signature2020 } from "@digitalcredentials/ed25519-signature-2020";
 import documentLoader from "../lib/documentLoader";
 import { Redis } from "ioredis";
+import { redirect } from "next/navigation";
 
 var redis: Redis;
 try {
@@ -35,6 +36,17 @@ export default function Home() {
     });
 
     console.log(signedCredential);
+
+    const uuid = crypto.randomUUID();
+    const MAX_AGE = 300; // 300 seconds = 5min
+    const EXPIRY_MS = "EX"; // seconds
+    redis.set(
+      "vc-" + uuid,
+      JSON.stringify(signedCredential),
+      EXPIRY_MS,
+      MAX_AGE
+    );
+    redirect("/vci/" + uuid);
   }
 
   const test_payload = {
