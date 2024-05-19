@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background-hex: #f7fff6;
-  --foreground-hex: #87D68D;
+  --background-hex: #f0fdf4;
+  --foreground-hex: #22c55e;
 }
 
 body {
