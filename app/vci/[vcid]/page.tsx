@@ -1,12 +1,13 @@
 "use client";
 import { useQRCode } from "next-qrcode";
 
-export default function Issuance({ params }: { params: { slug: string } }) {
+export default function Issuance({ params }: { params: { vcid: string } }) {
   const { Canvas } = useQRCode();
 
   const getWalletUrl = () => {
     const credentialOffer = {
-      credential_issuer: process.env.NEXT_PUBLIC_URL,
+      credential_issuer: process.env.NEXT_PUBLIC_URL + "/vci/" + params.vcid,
+      credential_configuration_ids: ["TestCredential"],
       grants: {
         "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
           "pre-authorized_code": "oaKazRN8I0IbtZ0C7JuMn5",
