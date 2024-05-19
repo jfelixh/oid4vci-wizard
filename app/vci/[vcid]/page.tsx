@@ -26,7 +26,7 @@ export default function Issuance({ params }: { params: { vcid: string } }) {
       <div>
         <h1 className="text-6xl">OID4VCI Wizard</h1>
         <p className="text-black">Scan the code to download your credential.</p>
-        <div className="w-full flex align-center justify-center">
+        <div className="w-full flex align-center justify-center pt-10">
           <Canvas
             text={getWalletUrl()}
             options={{

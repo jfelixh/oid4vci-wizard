@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# OID4VCI Wizard
+
+> [!WARNING]
+> This repository is intended as tool for developers and testers. It is not suitable for production scenarios.
+
+> [!NOTE]
+> This software currently supports [OpenID for Verifiable Credential Issuance - draft 13](https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html) and issues JSON-LD VCs (ldp_vc).
+
+This project provides a simple all-in-one setup that starts a web UI to issue Verifiable Credentials (VCs) with customizable content via the OID4VCI protocol. This is useful if you need specific VCs for testing or demonstrations that are not issued yet or would be hard to obtain from a production system. It might also be helpful in developing and validating new credential types and contexts.
+
+## Prerequisites
+
+You need:
+
+- NodeJS
+- npm
+- docker
+- ngrok (or equivalent tool)
+
+If you want to issue to a wallet, you need one that supports the used protocols and standards (see top of README). One possible option is [Altme](https://altme.io/).
 
 ## Getting Started
 
-First, run the development server:
+Open a tunnel to ensure your wallet can connect to your local setup:
+
+```bash
+ngrok http 3000
+```
+
+Create `.env` and populate it with your ngrok URL:
+
+```env
+NEXT_PUBLIC_URL=<your ngrok URL>
+```
+
+If you just cloned the project, remember to install dependencies:
+
+```bash
+npm i
+```
+
+Make sure docker is running, then use the included `compose.yaml` to quickly start a Redis:
+
+```bash
+docker compose up
+```
+
+Finally, start the NextJS website:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+(You could also build and start.)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comments
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If you are also testing with Altme, make sure to swith to a profile running on OID4VCI Draft 13, as the default is still Draft 11. That should allow you to get new credentials using this tool. For unknown reasons, the credentials may only appear after switching back to the default profile.
